@@ -1,0 +1,78 @@
+## OS-specific files
+.DS_Store
+.DS_Store?
+Thumbs.db
+
+## IDE / Editor files
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.sln.docuser
+*.suo
+*.userprefs
+
+## .NET Backend
+**/bin/
+**/obj/
+backend/TestResults/
+backend/appsettings.Development.json
+
+## Node / React Native / Expo Frontend
+frontend/node_modules/
+frontend/.expo/
+frontend/dist/
+frontend/web-build/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+## Android specific
+frontend/android/.gradle/
+frontend/android/build/
+frontend/android/app/build/
+frontend/android/local.properties
+*.apk
+*.aab
+*.keystore
+!frontend/android/app/debug.keystore
+
+## iOS specific
+frontend/ios/Pods/
+frontend/ios/build/
+frontend/ios/*.xcworkspace
+frontend/ios/xcuserdata/
+frontend/ios/DerivedData/
+frontend/ios/IPAs/
+
+## Database files
+*.db
+*.db-shm
+*.db-wal
+
+## Testing
+coverage/
+*.lcov
+
+## EAS (Expo Application Services)
+frontend/.eas/
+
+## GitHub Action Artifacts
+publish/
+
+## Temporary files
+*.tmp
+*.bak
+*.swp
+
+## Logs
+*.log
+logs/
+
+## Secrets (Always ensure these aren't checked in)
+secrets.json
