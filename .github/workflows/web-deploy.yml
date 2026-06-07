@@ -21,7 +21,7 @@ jobs:
         run: |
           cd frontend
           npm install
-          npx expo export:web
+          npx expo export
 
       - name: Build And Deploy
         uses: Azure/static-web-apps-deploy@v1

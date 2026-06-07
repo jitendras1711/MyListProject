@@ -19,4 +19,4 @@ jobs:
           action: "upload"
           app_location: "frontend"
           output_location: "dist"
-          app_build_command: "npm install && npx expo export:web"
+          app_build_command: "npm install && npx expo export"
