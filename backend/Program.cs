@@ -58,6 +58,9 @@ builder.Services.AddScoped<TodoService>();
 
 var app = builder.Build();
 
+// Basic route to verify the API is live
+app.MapGet("/", () => "Atomize API is running successfully!");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
