@@ -92,7 +92,8 @@ export default function LoginScreen() {
           
           <TouchableOpacity 
             style={styles.googleButton} 
-            onPress={() => Platform.OS === 'web' ? promptAsync() : nativeSignIn()}
+            // onPress={() => Platform.OS === 'web' ? promptAsync() : nativeSignIn()}
+            onPress={() => { if (Platform.OS === 'web') { console.log('Auth URL:', request?.url); promptAsync(); } else nativeSignIn(); }}
             disabled={Platform.OS === 'web' && !request}
           >
             <Ionicons name="logo-google" size={20} color="white" />
