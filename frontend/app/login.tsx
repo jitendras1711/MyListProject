@@ -32,7 +32,7 @@ export default function LoginScreen() {
   const theme = Colors[contextTheme];
   const isDark = contextTheme === 'dark';
   const webRedirectUri = typeof window !== 'undefined'
-    ? makeRedirectUri({ useProxy: false })
+    ? makeRedirectUri({ useProxy: true })
     : undefined;
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -98,8 +98,8 @@ export default function LoginScreen() {
             onPress={() => {
               if (Platform.OS === 'web') {
                 console.log('Auth URL:', request?.url);
-                console.log('Forced redirectUri:', webRedirectUri);
-                promptAsync({ useProxy: false });
+                console.log('Proxy redirectUri:', webRedirectUri);
+                promptAsync({ useProxy: true });
               } else {
                 nativeSignIn();
               }
