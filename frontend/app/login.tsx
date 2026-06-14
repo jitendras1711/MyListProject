@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { makeRedirectUri } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
@@ -30,15 +31,17 @@ export default function LoginScreen() {
   const { theme: contextTheme } = useThemeContext();
   const theme = Colors[contextTheme];
   const isDark = contextTheme === 'dark';
+  const webRedirectUri = typeof window !== 'undefined'
+    ? makeRedirectUri({ useProxy: false })
+    : undefined;
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-  androidClientId: '192788138454-dk8gf75h5kuiia9346enup99ub9i7inn.apps.googleusercontent.com',
-  webClientId: '192788138454-6cvomopeu4lg6ppvbm288bqcrejgcibe.apps.googleusercontent.com',
-  
-  /* ADD THESE TWO LINES BELOW */
-  responseType: 'id_token', 
-  scopes: ['openid', 'profile', 'email'],
-});
+    androidClientId: '192788138454-dk8gf75h5kuiia9346enup99ub9i7inn.apps.googleusercontent.com',
+    webClientId: '192788138454-6cvomopeu4lg6ppvbm288bqcrejgcibe.apps.googleusercontent.com',
+    responseType: 'id_token',
+    scopes: ['openid', 'profile', 'email'],
+    redirectUri: webRedirectUri,
+  });
 
   useEffect(() => {
   const handleWebSignIn = async () => {
@@ -92,8 +95,15 @@ export default function LoginScreen() {
           
           <TouchableOpacity 
             style={styles.googleButton} 
-            // onPress={() => Platform.OS === 'web' ? promptAsync() : nativeSignIn()}
-            onPress={() => { if (Platform.OS === 'web') { console.log('Auth URL:', request?.url); promptAsync(); } else nativeSignIn(); }}
+            onPress={() => {
+              if (Platform.OS === 'web') {
+                console.log('Auth URL:', request?.url);
+                console.log('Forced redirectUri:', webRedirectUri);
+                promptAsync({ useProxy: false });
+              } else {
+                nativeSignIn();
+              }
+            }}
             disabled={Platform.OS === 'web' && !request}
           >
             <Ionicons name="logo-google" size={20} color="white" />
