@@ -33,6 +33,7 @@ function InnerRootLayout() {
     const checkLogin = async () => {
       const token = await getToken('userToken');
       const inAuthGroup = (segments[0] as string) === 'login';
+      const inAuthCallback = (segments[0] as string) === 'auth' && (segments[1] as string) === 'callback';
 
       if (token) {
         let refreshedToken: string | null = null;
@@ -61,7 +62,7 @@ function InnerRootLayout() {
         }
 
         if (inAuthGroup) router.replace('/');
-      } else if (!inAuthGroup) {
+      } else if (!inAuthGroup && !inAuthCallback) {
         router.replace('/login');
       }
 
