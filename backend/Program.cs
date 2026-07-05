@@ -49,22 +49,9 @@ builder.Services.AddCors(options => {
     });
 });
 
-// In Azure, the connection string is usually injected through app settings or
-// App Service connection-string environment variables.
-var connectionString =
-    FirstConfigured(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection"),
-        Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING"),
-        Environment.GetEnvironmentVariable("SQLAZURECONNSTR_DefaultConnection"),
-        Environment.GetEnvironmentVariable("SQLCONNSTR_DefaultConnection"),
-        Environment.GetEnvironmentVariable("CUSTOMCONNSTR_DefaultConnection"));
-
-if (string.IsNullOrWhiteSpace(connectionString))
-{
-    throw new InvalidOperationException(
-        "Database connection string is not configured. Set ConnectionStrings:DefaultConnection or AZURE_SQL_CONNECTIONSTRING.");
-}
+// In Azure, the connection string is often injected as 'AZURE_SQL_CONNECTIONSTRING' 
+// or mapped to 'ConnectionStrings:DefaultConnection' in the App Service settings.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(connectionString));
 //builder.Services.AddDbContext<AppDbContext>(opt =>
@@ -303,9 +290,6 @@ app.MapDelete("/users/me", async (ClaimsPrincipal user, TodoService todoService)
 }).RequireAuthorization();
 
 app.Run();
-
-static string? FirstConfigured(params string?[] values) =>
-    values.FirstOrDefault(value => !string.IsNullOrWhiteSpace(value));
 
 public record ShareRequest(List<string> Emails);
 public record AddFriendRequest(string FriendEmail);
