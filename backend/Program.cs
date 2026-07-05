@@ -33,11 +33,16 @@ builder.Services.AddAuthorization();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? [];
+var defaultOrigins = new[] {
+    "http://localhost:8081",
+    "http://localhost:3000",
+    "https://jolly-beach-0f8530e10.7.azurestaticapps.net"
+};
+
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
-        policy.WithOrigins("http://localhost:8081", 
-                          "http://localhost:3000",
-                          builder.Configuration["AllowedOrigins"] ?? "https://atomize-web.azurestaticapps.net") 
+        policy.WithOrigins(defaultOrigins.Concat(allowedOrigins).Distinct().ToArray())
               .AllowAnyMethod()
               .AllowAnyHeader()
               .WithExposedHeaders("Authorization");
