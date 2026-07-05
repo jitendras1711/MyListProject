@@ -51,7 +51,13 @@ builder.Services.AddCors(options => {
 
 // In Azure, the connection string is often injected as 'AZURE_SQL_CONNECTIONSTRING' 
 // or mapped to 'ConnectionStrings:DefaultConnection' in the App Service settings.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Database connection string is not configured. Set ConnectionStrings:DefaultConnection or AZURE_SQL_CONNECTIONSTRING.");
+}
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(connectionString));
 //builder.Services.AddDbContext<AppDbContext>(opt =>

@@ -16,7 +16,9 @@ Thumbs.db
 **/bin/
 **/obj/
 backend/TestResults/
+backend/build_out/
 backend/appsettings.Development.json
+backend/appsettings.Production.json
 
 ## Node / React Native / Expo Frontend
 frontend/node_modules/
@@ -76,3 +78,5 @@ logs/
 
 ## Secrets (Always ensure these aren't checked in)
 secrets.json
+backend/appsettings.*.json
+!backend/appsettings.json

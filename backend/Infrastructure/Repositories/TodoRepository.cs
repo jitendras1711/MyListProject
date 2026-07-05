@@ -153,10 +153,11 @@ public class TodoRepository : ITodoRepository
         else
         {
             existing.Email = user.Email;
+            existing.Name = user.Name;
         }
 
         await _db.SaveChangesAsync();
-        return user;
+        return existing ?? user;
     }
 
     public async Task<SharedTodo?> GetSharedTodoAsync(int todoId, string sharedWithUserId)
