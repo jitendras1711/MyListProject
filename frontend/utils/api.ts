@@ -3,8 +3,14 @@ import { router } from 'expo-router';
 import { getToken, removeToken } from './storage';
 import { refreshAuthToken } from './auth';
 
-// Centralized URL: Change this once when you deploy to Azure
-const BASE_URL = Platform.OS === 'android' ? 'http://10.0.2.2:5024' : 'http://localhost:5024';
+const LOCAL_BASE_URL = Platform.OS === 'android' ? 'http://10.0.2.2:5024' : 'http://localhost:5024';
+const PROD_BASE_URL = 'https://atomizeapi-crbzbkfqbjftf6a8.canadacentral-01.azurewebsites.net';
+
+const isLocalDev = typeof window !== 'undefined'
+  ? window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  : Platform.OS !== 'web';
+
+const BASE_URL = isLocalDev ? LOCAL_BASE_URL : PROD_BASE_URL;
 
 const buildHeaders = (token?: string | null, extraHeaders: HeadersInit = {}) => ({
   'Content-Type': 'application/json',
