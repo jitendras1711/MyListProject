@@ -37,7 +37,9 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 var defaultOrigins = new[] {
     "http://localhost:8081",
     "http://localhost:3000",
-    "https://jolly-beach-0f8530e10.7.azurestaticapps.net"
+    "https://jolly-beach-0f8530e10.7.azurestaticapps.net",
+    "https://www.atomize.online",
+    "https://atomize.online"
 };
 
 builder.Services.AddCors(options => {
