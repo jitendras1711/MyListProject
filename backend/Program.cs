@@ -37,17 +37,41 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 var defaultOrigins = new[] {
     "http://localhost:8081",
     "http://localhost:3000",
+    "http://127.0.0.1:8081",
+    "http://127.0.0.1:3000",
+    "https://localhost:8081",
+    "https://localhost:3000",
     "https://jolly-beach-0f8530e10.7.azurestaticapps.net",
     "https://www.atomize.online",
     "https://atomize.online"
 };
+var configuredOrigins = defaultOrigins
+    .Concat(allowedOrigins)
+    .Where(origin => !string.IsNullOrWhiteSpace(origin))
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray();
 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
-        policy.WithOrigins(defaultOrigins.Concat(allowedOrigins).Distinct().ToArray())
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .WithExposedHeaders("Authorization");
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (string.IsNullOrWhiteSpace(origin))
+                return false;
+
+            if (origin.StartsWith("http://localhost", StringComparison.OrdinalIgnoreCase) ||
+                origin.StartsWith("https://localhost", StringComparison.OrdinalIgnoreCase) ||
+                origin.StartsWith("http://127.0.0.1", StringComparison.OrdinalIgnoreCase) ||
+                origin.StartsWith("https://127.0.0.1", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (origin.EndsWith(".azurestaticapps.net", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return configuredOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase);
+        })
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .WithExposedHeaders("Authorization");
     });
 });
 
