@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect } from 'react';
 import {
@@ -111,7 +111,18 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
-        <Text style={[styles.footer, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>By signing in, you agree to our Terms.</Text>
+        <View style={styles.footerLinks}>
+          <Link href="/privacy-policy" asChild>
+            <TouchableOpacity>
+              <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Privacy Policy</Text>
+            </TouchableOpacity>
+          </Link>
+          <Link href="/terms" asChild>
+            <TouchableOpacity>
+              <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Terms</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -168,5 +179,12 @@ const styles = StyleSheet.create({
     gap: 12 
   },
   buttonText: { color: 'white', fontSize: 16, fontWeight: '600' },
-  footer: { position: 'absolute', bottom: 40, color: '#ADB5BD', fontSize: 12 }
+  footerLinks: {
+    position: 'absolute',
+    bottom: 40,
+    flexDirection: 'row',
+    gap: 16,
+    alignItems: 'center',
+  },
+  footerLink: { fontSize: 12, textDecorationLine: 'underline' }
 });

@@ -85,6 +85,8 @@ function InnerRootLayout() {
       <Stack>
         {/* We add the login screen to the stack */}
         <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="privacy-policy" options={{ title: 'Privacy Policy' }} />
+        <Stack.Screen name="terms" options={{ title: 'Terms and Conditions' }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="task/[id]" options={{ title: 'Sub-tasks' }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
