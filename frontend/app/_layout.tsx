@@ -32,8 +32,10 @@ function InnerRootLayout() {
   useEffect(() => {
     const checkLogin = async () => {
       const token = await getToken('userToken');
-      const inAuthGroup = (segments[0] as string) === 'login';
-      const inAuthCallback = (segments[0] as string) === 'auth' && (segments[1] as string) === 'callback';
+      const currentSegment = (segments[0] as string) ?? '';
+      const inAuthGroup = currentSegment === 'login';
+      const inAuthCallback = currentSegment === 'auth' && (segments[1] as string) === 'callback';
+      const inPublicRoute = ['privacy-policy', 'terms'].includes(currentSegment) || inAuthCallback;
 
       if (token) {
         let refreshedToken: string | null = null;
@@ -62,7 +64,7 @@ function InnerRootLayout() {
         }
 
         if (inAuthGroup) router.replace('/');
-      } else if (!inAuthGroup && !inAuthCallback) {
+      } else if (!inAuthGroup && !inPublicRoute) {
         router.replace('/login');
       }
 

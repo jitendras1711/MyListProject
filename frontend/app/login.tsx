@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect } from 'react';
 import {
@@ -111,17 +111,16 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.footerLinks}>
-          <Link href="/privacy-policy" asChild>
-            <TouchableOpacity>
+        <View style={styles.footerContainer}>
+          <Text style={[styles.disclaimer, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>By signing up with Google, you agree to our Terms.</Text>
+          <View style={styles.footerLinks}>
+            <TouchableOpacity onPress={() => router.push('/privacy-policy')}>
               <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Privacy Policy</Text>
             </TouchableOpacity>
-          </Link>
-          <Link href="/terms" asChild>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/terms')}>
               <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Terms</Text>
             </TouchableOpacity>
-          </Link>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -179,9 +178,19 @@ const styles = StyleSheet.create({
     gap: 12 
   },
   buttonText: { color: 'white', fontSize: 16, fontWeight: '600' },
-  footerLinks: {
+  footerContainer: {
     position: 'absolute',
-    bottom: 40,
+    bottom: 24,
+    alignItems: 'center',
+    gap: 8,
+  },
+  disclaimer: { fontSize: 12, textAlign: 'center', maxWidth: 280 },
+  footerLinks: {
+    alignItems: 'center',
+    gap: 8,
+  },
+  disclaimer: { fontSize: 12, textAlign: 'center', maxWidth: 280 },
+  footerLinks: {
     flexDirection: 'row',
     gap: 16,
     alignItems: 'center',

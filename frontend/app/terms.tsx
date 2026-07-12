@@ -25,9 +25,14 @@ export default function TermsScreen() {
           Continued use of the app means you accept these terms and any updates we may publish.
         </Text>
         <Text style={[styles.contact, { color: theme.text }]}>Contact: jitendra.s1711@gmail.com</Text>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>Back</Text>
-        </TouchableOpacity>
+        <View style={styles.actions}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+            <Text style={styles.backButtonText}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.secondaryButton} onPress={() => router.replace('/login')}>
+            <Text style={styles.secondaryButtonText}>Back to login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -39,13 +44,24 @@ const styles = StyleSheet.create({
   title: { fontSize: 28, fontWeight: '700' },
   body: { fontSize: 15, lineHeight: 22 },
   contact: { fontSize: 15, fontWeight: '600', marginTop: 8 },
-  backButton: {
+  actions: {
+    flexDirection: 'row',
+    gap: 12,
     marginTop: 16,
+    flexWrap: 'wrap',
+  },
+  backButton: {
     paddingVertical: 12,
     paddingHorizontal: 16,
-    alignSelf: 'flex-start',
     borderRadius: 10,
     backgroundColor: '#4361EE',
   },
+  secondaryButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    backgroundColor: '#E9ECEF',
+  },
   backButtonText: { color: 'white', fontWeight: '600' },
+  secondaryButtonText: { color: '#1A1A1B', fontWeight: '600' },
 });
