@@ -67,7 +67,7 @@ We may update this Privacy Policy from time to time. We will notify you of any c
 ## 12. Contact Us
 If you have any questions about this Privacy Policy or wish to exercise your data rights, please contact us at:
 
-**Email:** jitendra.s1711@gmail.com
+**Email:** contact@atomize.online
 
 ---
 *This document was generated for Atomize and is intended for global compliance.*

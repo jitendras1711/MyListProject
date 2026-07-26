@@ -51,7 +51,7 @@ const privacySections = [
   },
   {
     title: '12. Contact Us',
-    body: 'If you have any questions about this Privacy Policy or wish to exercise your data rights, please contact us at jitendra.s1711@gmail.com.'
+    body: 'If you have any questions about this Privacy Policy or wish to exercise your data rights, please contact us at contact@atomize.online.'
   }
 ];
 

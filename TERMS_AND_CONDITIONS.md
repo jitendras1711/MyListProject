@@ -42,4 +42,4 @@ These Terms are governed by the laws of the jurisdiction in which the service pr
 ## 12. Contact
 If you have any questions about these Terms, please contact us at:
 
-**Email:** jitendra.s1711@gmail.com
+**Email:** contact@atomize.online

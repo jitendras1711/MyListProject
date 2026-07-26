@@ -51,7 +51,7 @@ const termsSections = [
   },
   {
     title: '12. Contact',
-    body: 'If you have any questions about these Terms, please contact us at jitendra.s1711@gmail.com.'
+    body: 'If you have any questions about these Terms, please contact us at contact@atomize.online.'
   }
 ];
 

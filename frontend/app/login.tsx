@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
+import { Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect } from 'react';
@@ -121,6 +122,9 @@ export default function LoginScreen() {
               <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Terms</Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={() => router.push('/delete-account')}>
+            <Text style={[styles.deleteLink, { color: isDark ? '#8FA1B4' : '#6C757D' }]}>Delete account and data</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
@@ -186,14 +190,10 @@ const styles = StyleSheet.create({
   },
   disclaimer: { fontSize: 12, textAlign: 'center', maxWidth: 280 },
   footerLinks: {
-    alignItems: 'center',
-    gap: 8,
-  },
-  disclaimer: { fontSize: 12, textAlign: 'center', maxWidth: 280 },
-  footerLinks: {
     flexDirection: 'row',
     gap: 16,
     alignItems: 'center',
   },
-  footerLink: { fontSize: 12, textDecorationLine: 'underline' }
+  footerLink: { fontSize: 12, textDecorationLine: 'underline' },
+  deleteLink: { fontSize: 11, textAlign: 'center', marginTop: 2, textDecorationLine: 'underline' }
 });

@@ -33,9 +33,10 @@ function InnerRootLayout() {
     const checkLogin = async () => {
       const token = await getToken('userToken');
       const currentSegment = (segments[0] as string) ?? '';
+      const nextSegment = (segments[1] as string) ?? '';
       const inAuthGroup = currentSegment === 'login';
-      const inAuthCallback = currentSegment === 'auth' && (segments[1] as string) === 'callback';
-      const inPublicRoute = ['privacy-policy', 'terms'].includes(currentSegment) || inAuthCallback;
+      const inAuthCallback = currentSegment === 'auth' && nextSegment === 'callback';
+      const inPublicRoute = ['privacy-policy', 'terms', 'delete-account'].includes(currentSegment) || inAuthCallback;
 
       if (token) {
         let refreshedToken: string | null = null;
@@ -89,6 +90,7 @@ function InnerRootLayout() {
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="privacy-policy" options={{ title: 'Privacy Policy' }} />
         <Stack.Screen name="terms" options={{ title: 'Terms and Conditions' }} />
+        <Stack.Screen name="delete-account" options={{ title: 'Delete Account' }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="task/[id]" options={{ title: 'Sub-tasks' }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />

@@ -209,7 +209,7 @@ export default function SettingsScreen() {
 
           <TouchableOpacity
             style={[styles.linkItem, { backgroundColor: cardBackground, borderColor: surfaceBorder, borderWidth: 1 }]}
-            onPress={() => openUrl('mailto:jitendra.s1711@gmail.com')}
+            onPress={() => openUrl('mailto:contact@atomize.online')}
           >
             <Text style={[styles.linkLabel, { color: themeColors.text }]}>Support</Text>
             <IconSymbol size={18} name="chevron.right" color={themeColors.icon} />
