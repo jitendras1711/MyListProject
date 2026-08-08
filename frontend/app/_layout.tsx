@@ -87,13 +87,13 @@ function InnerRootLayout() {
     <ThemeProvider value={contextTheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         {/* We add the login screen to the stack */}
-        <Stack.Screen name="login" options={{ headerShown: false }} />
-        <Stack.Screen name="privacy-policy" options={{ title: 'Privacy Policy' }} />
-        <Stack.Screen name="terms" options={{ title: 'Terms and Conditions' }} />
-        <Stack.Screen name="delete-account" options={{ title: 'Delete Account' }} />
+        <Stack.Screen name="login" options={{ headerShown: false, title: 'Atomize - Login' }} />
+        <Stack.Screen name="privacy-policy" options={{ title: 'Atomize - Privacy Policy' }} />
+        <Stack.Screen name="terms" options={{ title: 'Atomize - Terms and Conditions' }} />
+        <Stack.Screen name="delete-account" options={{ title: 'Atomize - Delete Account' }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="task/[id]" options={{ title: 'Sub-tasks' }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+        <Stack.Screen name="task/[id]" options={{ title: 'Atomize - Sub-tasks' }} />
+        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Atomize - Modal' }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

@@ -263,7 +263,7 @@ export default function SubTaskScreen() {
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}> 
             <Stack.Screen options={{
-                title: parentTitle ? (parentTitle as string) : "Subtasks",
+                title: parentTitle ? `Atomize - ${parentTitle as string}` : 'Atomize - Subtasks',
                 headerShadowVisible: false,
                 headerStyle: { backgroundColor: theme.background },
                 headerTitleStyle: { fontWeight: '700', color: theme.text },

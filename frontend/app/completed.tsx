@@ -112,7 +112,7 @@ export default function CompletedItemsScreen() {
     <View style={[styles.container, { backgroundColor: theme.background }]}> 
       <Stack.Screen
         options={{
-          title: 'Completed Items',
+          title: 'Atomize - Completed Items',
           headerShadowVisible: false,
           headerStyle: { backgroundColor: theme.background },
           headerTitleStyle: { fontWeight: '700', color: theme.text },
