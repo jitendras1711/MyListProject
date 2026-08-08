@@ -1,4 +1,5 @@
 import React from 'react';
+import { Head } from 'expo-router';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeContext } from '@/hooks/theme-context';
@@ -12,6 +13,9 @@ export default function DeleteAccountScreen() {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Head>
+        <title>Atomize - Delete Account</title>
+      </Head>
       <View style={styles.content}>
         <Text style={[styles.title, { color: theme.text }]}>Delete your account and data</Text>
         <Text style={[styles.body, { color: isDark ? '#A8B0BB' : '#6C757D' }]}> 

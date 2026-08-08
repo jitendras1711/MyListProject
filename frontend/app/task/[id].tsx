@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Head, Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     FlatList,
@@ -33,6 +33,7 @@ export default function SubTaskScreen() {
     const { id, parentTitle, grandparentTitle } = useLocalSearchParams();
     const taskId = Number(id);
     const router = useRouter();
+    const pageTitle = parentTitle ? `Atomize - ${parentTitle as string}` : 'Atomize - Subtasks';
     const { theme: contextTheme } = useThemeContext();
     const theme = Colors[contextTheme];
     const isDark = contextTheme === 'dark';

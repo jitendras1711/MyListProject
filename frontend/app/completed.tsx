@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Stack, useRouter } from 'expo-router';
+import { Head, Stack, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   FlatList,
@@ -110,6 +110,9 @@ export default function CompletedItemsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Head>
+        <title>Atomize - Completed Items</title>
+      </Head>
       <Stack.Screen
         options={{
           title: 'Atomize - Completed Items',

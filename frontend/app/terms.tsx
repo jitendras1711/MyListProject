@@ -1,4 +1,5 @@
 import React from 'react';
+import { Head } from 'expo-router';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemeContext } from '@/hooks/theme-context';
@@ -63,6 +64,9 @@ export default function TermsScreen() {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Head>
+        <title>Atomize - Terms and Conditions</title>
+      </Head>
       <View style={styles.content}>
         <Text style={[styles.title, { color: theme.text }]}>Terms and Conditions</Text>
         <Text style={[styles.subtitle, { color: isDark ? '#A8B0BB' : '#6C757D' }]}>Effective Date: July 11, 2026</Text>

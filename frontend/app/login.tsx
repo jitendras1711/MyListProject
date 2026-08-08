@@ -3,7 +3,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
 import { Linking } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Head, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect } from 'react';
 import {
@@ -80,6 +80,9 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Head>
+        <title>Atomize - Login</title>
+      </Head>
       <View style={styles.content}>
         {/* Logo Section */}
         <View style={styles.logoContainer}>
