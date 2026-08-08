@@ -85,7 +85,7 @@ export default function LoginScreen() {
         <View style={styles.logoContainer}>
           <View style={[styles.logoCircle, { backgroundColor: isDark ? theme.card : '#fff' }]}> 
             <Image
-              source={require('../assets/images/android-icon-foreground.png')}
+              source={require('../assets/images/icon-login.png')}
               style={{ width: 48, height: 48, resizeMode: 'contain' }}
             />
           </View>
