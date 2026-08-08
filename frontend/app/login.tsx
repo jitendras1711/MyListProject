@@ -12,7 +12,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Image,
 } from 'react-native';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
@@ -83,7 +84,10 @@ export default function LoginScreen() {
         {/* Logo Section */}
         <View style={styles.logoContainer}>
           <View style={[styles.logoCircle, { backgroundColor: isDark ? theme.card : '#fff' }]}> 
-            <Ionicons name="flash" size={40} color="#4361EE" />
+            <Image
+              source={require('../assets/images/android-icon-foreground.png')}
+              style={{ width: 48, height: 48, resizeMode: 'contain' }}
+            />
           </View>
           <Text style={[styles.title, { color: theme.text }]}>Atomize</Text>
           <Text style={[styles.subtitle, { color: isDark ? '#A8B0BB' : '#6C757D' }]}>Micro tasks. Massive results.</Text>
