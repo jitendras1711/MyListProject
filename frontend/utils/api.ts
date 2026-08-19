@@ -3,14 +3,22 @@ import { router } from 'expo-router';
 import { getToken, removeToken } from './storage';
 import { refreshAuthToken } from './auth';
 
-const LOCAL_BASE_URL = Platform.OS === 'android' ? 'http://10.0.2.2:5024' : 'http://localhost:5024';
+const LOCAL_BASE_URL = 'http://localhost:5024';
+const ANDROID_EMULATOR_BASE_URL = 'http://10.0.2.2:5024';
 const PROD_BASE_URL = 'https://atomizeapi-crbzbkfqbjftf6a8.canadacentral-01.azurewebsites.net';
 
-const isLocalDev = typeof window !== 'undefined'
-  ? window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  : Platform.OS !== 'web';
+const envBaseUrl =
+  typeof process !== 'undefined' && process.env?.EXPO_PUBLIC_API_URL
+    ? String(process.env.EXPO_PUBLIC_API_URL).replace(/\/$/, '')
+    : undefined;
 
-const BASE_URL = isLocalDev ? LOCAL_BASE_URL : PROD_BASE_URL;
+const isWebLocalhost = typeof window !== 'undefined'
+  ? window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  : false;
+
+const BASE_URL = envBaseUrl
+  || (Platform.OS === 'web' && isWebLocalhost ? LOCAL_BASE_URL : PROD_BASE_URL)
+  || ANDROID_EMULATOR_BASE_URL;
 
 const buildHeaders = (token?: string | null, extraHeaders: HeadersInit = {}) => ({
   'Content-Type': 'application/json',
