@@ -22,18 +22,12 @@ import { useThemeContext } from '@/hooks/theme-context';
 
 WebBrowser.maybeCompleteAuthSession();
 
-if (Platform.OS !== 'web') {
-  GoogleSignin.configure({
-    webClientId: '192788138454-6cvomopeu4lg6ppvbm288bqcrejgcibe.apps.googleusercontent.com',
-  });
-}
-
 export default function LoginScreen() {
   const router = useRouter();
   const { theme: contextTheme } = useThemeContext();
   const theme = Colors[contextTheme];
   const isDark = contextTheme === 'dark';
-  const webRedirectUri = typeof window !== 'undefined'
+  const webRedirectUri = typeof window !== 'undefined' && window.location?.origin
     ? `${window.location.origin}/auth/callback`
     : undefined;
 
@@ -64,6 +58,9 @@ export default function LoginScreen() {
 
   const nativeSignIn = async () => {
     try {
+      GoogleSignin.configure({
+        webClientId: '192788138454-6cvomopeu4lg6ppvbm288bqcrejgcibe.apps.googleusercontent.com',
+      });
       await GoogleSignin.hasPlayServices();
       const res = await GoogleSignin.signIn();
       // LOG THIS: Ensure it starts with 'eyJ...' and NOT 'ya29'

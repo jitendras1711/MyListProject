@@ -12,7 +12,7 @@ export default function CalendarNotesPrivacyPolicyScreen() {
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.content}>
         <Text style={[styles.title, { color: theme.text }]}>Privacy Policy for CalandarNotes</Text>
-        <Text style={[styles.meta, { color: isDark ? '#A8B0BB' : '#6C757D' }]}>Last Updated: [Date]</Text>
+        <Text style={[styles.meta, { color: isDark ? '#A8B0BB' : '#6C757D' }]}>Last Updated: 22 Aug 2026</Text>
 
         <Text style={[styles.paragraph, { color: isDark ? '#A8B0BB' : '#6C757D' }]}>
           CalandarNotes ("the App") is committed to protecting your privacy. This policy explains how we handle your data.
