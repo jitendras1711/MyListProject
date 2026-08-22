@@ -78,6 +78,11 @@ export default function LoginScreen() {
     }
   };
 
+  const openLegalPage = (page: string) => {
+    const url = `https://www.atomize.online/${page}`;
+    Linking.openURL(url);
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}> 
       <View style={styles.content}>
@@ -104,7 +109,7 @@ export default function LoginScreen() {
               if (Platform.OS === 'web') {
                 console.log('Auth URL:', request?.url);
                 console.log('Forced redirectUri:', webRedirectUri);
-                promptAsync({ useProxy: false });
+                promptAsync();
               } else {
                 nativeSignIn();
               }
@@ -119,14 +124,14 @@ export default function LoginScreen() {
         <View style={styles.footerContainer}>
           <Text style={[styles.disclaimer, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>By signing up with Google, you agree to our Terms.</Text>
           <View style={styles.footerLinks}>
-            <TouchableOpacity onPress={() => router.push('/privacy-policy')}>
+            <TouchableOpacity onPress={() => openLegalPage('privacy-policy')}>
               <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Privacy Policy</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/terms')}>
+            <TouchableOpacity onPress={() => openLegalPage('terms')}>
               <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Terms</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => router.push('/delete-account')}>
+          <TouchableOpacity onPress={() => openLegalPage('delete-account')}>
             <Text style={[styles.deleteLink, { color: isDark ? '#8FA1B4' : '#6C757D' }]}>Delete account and data</Text>
           </TouchableOpacity>
         </View>
