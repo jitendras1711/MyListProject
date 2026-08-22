@@ -32,7 +32,11 @@ function InnerRootLayout() {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!rootNavigationState?.key || !pathname) return;
+    const browserPathname = Platform.OS === 'web' && typeof window !== 'undefined'
+      ? window.location.pathname
+      : pathname;
+
+    if (!rootNavigationState?.key || !browserPathname) return;
 
     const checkLogin = async () => {
       const token = await getToken('userToken');
@@ -47,7 +51,7 @@ function InnerRootLayout() {
         'calendar-notes-privacy-policy',
       ];
       const inPublicRoute = inAuthCallback || publicPaths.some((path) =>
-        pathname === `/${path}` || pathname.startsWith(`/${path}/`)
+        browserPathname === `/${path}` || browserPathname.startsWith(`/${path}/`)
       );
 
       if (inPublicRoute) {
