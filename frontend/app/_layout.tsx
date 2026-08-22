@@ -1,5 +1,5 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { Stack, useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
@@ -26,17 +26,25 @@ export default function RootLayout() {
 function InnerRootLayout() {
   const { theme: contextTheme } = useThemeContext();
   const segments = useSegments();
+  const rootNavigationState = useRootNavigationState();
   const router = useRouter();
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    if (!rootNavigationState?.key) return;
+
     const checkLogin = async () => {
       const token = await getToken('userToken');
       const currentSegment = (segments[0] as string) ?? '';
       const nextSegment = (segments[1] as string) ?? '';
       const inAuthGroup = currentSegment === 'login';
       const inAuthCallback = currentSegment === 'auth' && nextSegment === 'callback';
-      const inPublicRoute = ['privacy-policy', 'terms', 'delete-account'].includes(currentSegment) || inAuthCallback;
+      const inPublicRoute = [
+        'privacy-policy',
+        'terms',
+        'delete-account',
+        'calendar-notes-privacy-policy',
+      ].includes(currentSegment) || inAuthCallback;
 
       if (token) {
         let refreshedToken: string | null = null;
@@ -73,7 +81,7 @@ function InnerRootLayout() {
     };
 
     checkLogin();
-  }, [segments]);
+  }, [rootNavigationState?.key, segments]);
 
   // Don't render anything until we know the auth state
   if (!isReady) return null;
@@ -91,6 +99,7 @@ function InnerRootLayout() {
         <Stack.Screen name="privacy-policy" options={{ title: 'Privacy Policy' }} />
         <Stack.Screen name="terms" options={{ title: 'Terms and Conditions' }} />
         <Stack.Screen name="delete-account" options={{ title: 'Delete Account' }} />
+        <Stack.Screen name="calendar-notes-privacy-policy" options={{ title: 'CalandarNotes Privacy Policy' }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="task/[id]" options={{ title: 'Sub-tasks' }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
