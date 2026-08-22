@@ -1,5 +1,5 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, useRootNavigationState, useRouter, useSegments } from 'expo-router';
+import { Stack, usePathname, useRootNavigationState, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
@@ -26,12 +26,13 @@ export default function RootLayout() {
 function InnerRootLayout() {
   const { theme: contextTheme } = useThemeContext();
   const segments = useSegments();
+  const pathname = usePathname();
   const rootNavigationState = useRootNavigationState();
   const router = useRouter();
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!rootNavigationState?.key || !segments[0]) return;
+    if (!rootNavigationState?.key || !pathname) return;
 
     const checkLogin = async () => {
       const token = await getToken('userToken');
@@ -39,12 +40,15 @@ function InnerRootLayout() {
       const nextSegment = (segments[1] as string) ?? '';
       const inAuthGroup = currentSegment === 'login';
       const inAuthCallback = currentSegment === 'auth' && nextSegment === 'callback';
-      const inPublicRoute = [
+      const publicPaths = [
         'privacy-policy',
         'terms',
         'delete-account',
         'calendar-notes-privacy-policy',
-      ].includes(currentSegment) || inAuthCallback;
+      ];
+      const inPublicRoute = inAuthCallback || publicPaths.some((path) =>
+        pathname === `/${path}` || pathname.startsWith(`/${path}/`)
+      );
 
       if (inPublicRoute) {
         setIsReady(true);
@@ -86,7 +90,7 @@ function InnerRootLayout() {
     };
 
     checkLogin();
-  }, [rootNavigationState?.key, segments]);
+  }, [rootNavigationState?.key, pathname, segments]);
 
   // Don't render anything until we know the auth state
   if (!isReady) return null;
