@@ -31,7 +31,7 @@ function InnerRootLayout() {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!rootNavigationState?.key) return;
+    if (!rootNavigationState?.key || !segments[0]) return;
 
     const checkLogin = async () => {
       const token = await getToken('userToken');
@@ -45,6 +45,11 @@ function InnerRootLayout() {
         'delete-account',
         'calendar-notes-privacy-policy',
       ].includes(currentSegment) || inAuthCallback;
+
+      if (inPublicRoute) {
+        setIsReady(true);
+        return;
+      }
 
       if (token) {
         let refreshedToken: string | null = null;
