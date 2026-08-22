@@ -5,6 +5,22 @@
   },
   "routes": [
     {
+      "route": "/privacy-policy",
+      "rewrite": "/privacy-policy.html"
+    },
+    {
+      "route": "/terms",
+      "rewrite": "/terms.html"
+    },
+    {
+      "route": "/delete-account",
+      "rewrite": "/delete-account.html"
+    },
+    {
+      "route": "/calendar-notes-privacy-policy",
+      "rewrite": "/calendar-notes-privacy-policy.html"
+    },
+    {
       "route": "/auth/callback",
       "rewrite": "/index.html"
     }
