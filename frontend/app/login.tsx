@@ -1,21 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { makeRedirectUri } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
-import { Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Linking,
   Platform,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  Image
+  View
 } from 'react-native';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 import { saveToken } from '../utils/storage'; // Adjusted path
 import { useThemeContext } from '@/hooks/theme-context';
@@ -27,6 +27,7 @@ export default function LoginScreen() {
   const { theme: contextTheme } = useThemeContext();
   const theme = Colors[contextTheme];
   const isDark = contextTheme === 'dark';
+  const [isLoading, setIsLoading] = useState(false);
   const webRedirectUri = typeof window !== 'undefined' && window.location?.origin
     ? `${window.location.origin}/auth/callback`
     : undefined;
@@ -40,27 +41,32 @@ export default function LoginScreen() {
   });
 
   useEffect(() => {
-  const handleWebSignIn = async () => {
-    if (Platform.OS === 'web' && response?.type === 'success') {
-      const token = response.params?.id_token || response.authentication?.idToken; 
+    const handleWebSignIn = async () => {
+      if (Platform.OS !== 'web' || !response) return;
 
-      if (token) {
-        await saveToken('userToken', token);
-        router.replace('/(tabs)');
-      } else {
-        console.error("ID Token missing. Ensure 'responseType: id_token' is in useAuthRequest.");
+      if (response.type === 'success') {
+        const token = response.params?.id_token || response.authentication?.idToken;
+
+        if (token) {
+          await saveToken('userToken', token);
+          router.replace('/(tabs)');
+        } else {
+          console.error("ID Token missing. Ensure 'responseType: id_token' is in useAuthRequest.");
+          Alert.alert('Sign in failed', 'Google did not return a valid sign-in token. Please try again.');
+          setIsLoading(false);
+        }
+        return;
       }
-    }
-  };
 
-  handleWebSignIn();
-}, [response]);
+      setIsLoading(false);
+    };
+
+    handleWebSignIn();
+  }, [response, router]);
 
   const nativeSignIn = async () => {
     try {
-      GoogleSignin.configure({
-        webClientId: '192788138454-6cvomopeu4lg6ppvbm288bqcrejgcibe.apps.googleusercontent.com',
-      });
+      setIsLoading(true);
       await GoogleSignin.hasPlayServices();
       const res = await GoogleSignin.signIn();
       // LOG THIS: Ensure it starts with 'eyJ...' and NOT 'ya29'
@@ -69,15 +75,44 @@ export default function LoginScreen() {
       if (token) {
         await saveToken('userToken', token);
         router.replace('/(tabs)');
+      } else {
+        Alert.alert('Sign in failed', 'Google did not return a valid sign-in token. Please try again.');
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Native Login Error:", error);
+      Alert.alert('Sign in failed', 'Unable to sign in with Google. Please try again.');
+      setIsLoading(false);
     }
   };
 
   const openLegalPage = (page: string) => {
     const url = `https://www.atomize.online/${page}`;
-    Linking.openURL(url);
+    Linking.openURL(url).catch(() => {
+      Alert.alert('Unable to open link', 'Please try again in a moment.');
+    });
+  };
+
+  const handleGooglePress = async () => {
+    if (isLoading) return;
+
+    if (Platform.OS === 'web') {
+      if (!request) {
+        Alert.alert('Please wait', 'Google sign-in is still loading. Try again in a moment.');
+        return;
+      }
+
+      console.log('Auth URL:', request.url);
+      console.log('Forced redirectUri:', webRedirectUri);
+      setIsLoading(true);
+      const result = await promptAsync();
+      if (result.type !== 'success') {
+        setIsLoading(false);
+      }
+      return;
+    }
+
+    nativeSignIn();
   };
 
   return (
@@ -101,34 +136,39 @@ export default function LoginScreen() {
           <Text style={[styles.cardSub, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Sign in to continue your streak</Text>
           
           <TouchableOpacity 
-            style={styles.googleButton} 
-            onPress={() => {
-              if (Platform.OS === 'web') {
-                console.log('Auth URL:', request?.url);
-                console.log('Forced redirectUri:', webRedirectUri);
-                promptAsync();
-              } else {
-                nativeSignIn();
-              }
-            }}
-            disabled={Platform.OS === 'web' && !request}
+            style={[
+              styles.googleButton,
+              (isLoading || (Platform.OS === 'web' && !request)) && styles.googleButtonDisabled
+            ]}
+            onPress={handleGooglePress}
+            disabled={isLoading}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+            accessibilityLabel="Continue with Google"
           >
-            <Ionicons name="logo-google" size={20} color="white" />
-            <Text style={styles.buttonText}>Continue with Google</Text>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              <>
+                <Ionicons name="logo-google" size={20} color="white" />
+                <Text style={styles.buttonText}>Continue with Google</Text>
+              </>
+            )}
           </TouchableOpacity>
         </View>
 
         <View style={styles.footerContainer}>
           <Text style={[styles.disclaimer, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>By signing up with Google, you agree to our Terms.</Text>
           <View style={styles.footerLinks}>
-            <TouchableOpacity onPress={() => openLegalPage('privacy-policy')}>
+            <TouchableOpacity onPress={() => openLegalPage('privacy-policy')} style={styles.footerLinkTouchable}>
               <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Privacy Policy</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => openLegalPage('terms')}>
+            <Text style={[{ color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>|</Text>
+            <TouchableOpacity onPress={() => openLegalPage('terms')} style={styles.footerLinkTouchable}>
               <Text style={[styles.footerLink, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>Terms</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => openLegalPage('delete-account')}>
+          <TouchableOpacity onPress={() => openLegalPage('delete-account')} style={styles.deleteLinkTouchable}>
             <Text style={[styles.deleteLink, { color: isDark ? '#8FA1B4' : '#6C757D' }]}>Delete account and data</Text>
           </TouchableOpacity>
         </View>
@@ -187,6 +227,10 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     gap: 12 
   },
+  googleButtonDisabled: {
+    opacity: 0.6,
+    backgroundColor: '#8B9EEE',
+  },
   buttonText: { color: 'white', fontSize: 16, fontWeight: '600' },
   footerContainer: {
     position: 'absolute',
@@ -197,9 +241,22 @@ const styles = StyleSheet.create({
   disclaimer: { fontSize: 12, textAlign: 'center', maxWidth: 280 },
   footerLinks: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 8,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  footerLinkTouchable: {
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    minHeight: 48,
+    justifyContent: 'center',
   },
   footerLink: { fontSize: 12, textDecorationLine: 'underline' },
+  deleteLinkTouchable: {
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    minHeight: 48,
+    justifyContent: 'center',
+  },
   deleteLink: { fontSize: 11, textAlign: 'center', marginTop: 2, textDecorationLine: 'underline' }
 });

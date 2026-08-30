@@ -7,6 +7,12 @@ const WEB_CLIENT_ID = '192788138454-6cvomopeu4lg6ppvbm288bqcrejgcibe.apps.google
 const WEB_SCOPES = ['openid', 'profile', 'email'];
 const GOOGLE_AUTH_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
 
+if (Platform.OS !== 'web') {
+  GoogleSignin.configure({
+    webClientId: WEB_CLIENT_ID,
+  });
+}
+
 export const isTokenExpired = (token: string): boolean => {
   try {
     const base64Url = token.split('.')[1];
