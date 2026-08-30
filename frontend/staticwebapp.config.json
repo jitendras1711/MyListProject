@@ -21,6 +21,10 @@
       "rewrite": "/calendar-notes-privacy-policy.html"
     },
     {
+      "route": "/home",
+      "rewrite": "/home.html"
+    },
+    {
       "route": "/auth/callback",
       "rewrite": "/index.html"
     }

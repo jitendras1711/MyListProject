@@ -3,9 +3,14 @@ import { router } from 'expo-router';
 import { getToken, removeToken } from './storage';
 import { refreshAuthToken } from './auth';
 
+type ApiRequestOptions = RequestInit & {
+  suppressErrorAlert?: boolean;
+};
+
 const LOCAL_BASE_URL = 'http://localhost:5024';
 const ANDROID_EMULATOR_BASE_URL = 'http://10.0.2.2:5024';
 const PROD_BASE_URL = 'https://atomizeapi-crbzbkfqbjftf6a8.canadacentral-01.azurewebsites.net';
+const isDev = process.env.NODE_ENV !== 'production';
 
 const envBaseUrl =
   typeof process !== 'undefined' && process.env?.EXPO_PUBLIC_API_URL
@@ -26,17 +31,33 @@ const buildHeaders = (token?: string | null, extraHeaders: HeadersInit = {}) => 
   ...extraHeaders,
 });
 
-export const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
+export const apiRequest = async (endpoint: string, options: ApiRequestOptions = {}) => {
+  const { suppressErrorAlert = false, ...fetchOptions } = options;
   const initialToken = await getToken('userToken');
 
   const executeRequest = async (token?: string | null) => {
     return fetch(`${BASE_URL}${endpoint}`, {
-      ...options,
-      headers: buildHeaders(token, options.headers ?? {}),
+      ...fetchOptions,
+      headers: buildHeaders(token, fetchOptions.headers ?? {}),
     });
   };
 
-  let response = await executeRequest(initialToken);
+  let response: Response;
+  try {
+    response = await executeRequest(initialToken);
+  } catch (error) {
+    if (isDev) {
+      console.error(`Request ${endpoint} failed before receiving a response:`, error);
+    }
+
+    if (!suppressErrorAlert) {
+      Alert.alert('Connection problem', 'Please check your internet connection and try again.');
+    }
+
+    const err = new Error('Connection problem. Please try again.') as any;
+    err.status = 0;
+    throw err;
+  }
 
   if (response.status === 401 && initialToken) {
     const refreshedToken = await refreshAuthToken();
@@ -61,9 +82,16 @@ export const apiRequest = async (endpoint: string, options: RequestInit = {}) =>
       /* ignore */
     }
 
-    const msg = `Request ${endpoint} failed (${response.status} ${response.statusText})` +
+    const devDetails = `Request ${endpoint} failed (${response.status} ${response.statusText})` +
       (details ? `\n${details}` : '');
-    Alert.alert('Network Error', msg);
+    if (isDev) {
+      console.error(devDetails);
+    }
+
+    const msg = 'Something went wrong. Please try again.';
+    if (!suppressErrorAlert) {
+      Alert.alert('Request failed', msg);
+    }
 
     const err = new Error(msg) as any;
     err.status = response.status;

@@ -107,11 +107,13 @@ export default function HomeScreen() {
 
   const fetchFriends = async () => {
     try {
-      const res = await apiRequest('/friends');
+      const res = await apiRequest('/friends', { suppressErrorAlert: true });
       const data = await res.json();
       setFriends(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error('Failed to load friends:', err);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('Failed to load friends:', err);
+      }
     }
   };
 
@@ -145,12 +147,14 @@ export default function HomeScreen() {
     if (showLoading) setLoading(true);
     setFetchError('');
     try {
-      const res = await apiRequest('/items');
+      const res = await apiRequest('/items', { suppressErrorAlert: true });
       const data = await res.json();
       setItems(data.filter((item: TodoItem) => !item.isCompleted));
     } catch (err) {
-      console.error(err);
-      setFetchError('Unable to load tasks. Check your internet connection or try again later.');
+      if (process.env.NODE_ENV !== 'production') {
+        console.error(err);
+      }
+      setFetchError("We couldn't load your tasks. Check your connection and try again.");
     } finally {
       if (showLoading) setLoading(false);
     }

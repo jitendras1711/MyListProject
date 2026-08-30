@@ -60,26 +60,10 @@ function InnerRootLayout() {
       }
 
       if (token) {
-        let refreshedToken: string | null = null;
-
-        if (Platform.OS === 'web') {
-          const isExpired = isTokenExpired(token);
-          if (isExpired) {
-            refreshedToken = await refreshAuthToken();
-            if (!refreshedToken) {
-              await removeToken('userToken');
-              router.replace('/login');
-              return;
-            }
-          }
-        } else {
-          try {
-            refreshedToken = await refreshAuthToken();
-            if (!refreshedToken) {
-              router.replace('/login');
-              return;
-            }
-          } catch {
+        if (Platform.OS === 'web' && isTokenExpired(token)) {
+          const refreshedToken = await refreshAuthToken();
+          if (!refreshedToken) {
+            await removeToken('userToken');
             router.replace('/login');
             return;
           }
