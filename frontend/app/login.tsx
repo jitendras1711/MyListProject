@@ -115,6 +115,19 @@ export default function LoginScreen() {
     nativeSignIn();
   };
 
+  const handleDemoAccess = async () => {
+    try {
+      setIsLoading(true);
+      const demoToken = 'demo_' + Date.now();
+      await saveToken('userToken', demoToken);
+      router.replace('/(tabs)');
+    } catch (error) {
+      console.error('Demo access error:', error);
+      Alert.alert('Demo access failed', 'Unable to enter demo mode. Please try again.');
+      setIsLoading(false);
+    }
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}> 
       <View style={styles.content}>
@@ -154,6 +167,20 @@ export default function LoginScreen() {
                 <Text style={styles.buttonText}>Continue with Google</Text>
               </>
             )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.demoButton,
+              isLoading && styles.demoButtonDisabled
+            ]}
+            onPress={handleDemoAccess}
+            disabled={isLoading}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+            accessibilityLabel="Demo Mode for reviewers"
+          >
+            <Text style={styles.demoButtonText}>Demo Mode</Text>
           </TouchableOpacity>
         </View>
 
@@ -232,6 +259,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#8B9EEE',
   },
   buttonText: { color: 'white', fontSize: 16, fontWeight: '600' },
+  demoButton: {
+    marginTop: 12,
+    borderWidth: 2,
+    borderColor: '#4361EE',
+    width: '100%',
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  demoButtonDisabled: {
+    opacity: 0.5,
+    borderColor: '#8B9EEE',
+  },
+  demoButtonText: {
+    color: '#4361EE',
+    fontSize: 14,
+    fontWeight: '600',
+  },
   footerContainer: {
     position: 'absolute',
     bottom: 24,
