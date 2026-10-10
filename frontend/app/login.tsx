@@ -184,7 +184,7 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.footerContainer}>
+        <View pointerEvents="box-none" style={styles.footerContainer}>
           <Text style={[styles.disclaimer, { color: isDark ? '#A8B0BB' : '#ADB5BD' }]}>By signing up with Google, you agree to our Terms.</Text>
           <View style={styles.footerLinks}>
             <TouchableOpacity onPress={() => openLegalPage('privacy-policy')} style={styles.footerLinkTouchable}>

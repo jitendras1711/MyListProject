@@ -8,7 +8,7 @@ import { useThemeContext } from '@/hooks/theme-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ThemeProvider as AppThemeProvider } from '@/hooks/theme-context';
 import { Platform } from 'react-native';
-import { isTokenExpired, refreshAuthToken } from '@/utils/auth';
+import { isDemoToken, isTokenExpired, refreshAuthToken } from '@/utils/auth';
 
 
 
@@ -60,7 +60,7 @@ function InnerRootLayout() {
       }
 
       if (token) {
-        if (Platform.OS === 'web' && isTokenExpired(token)) {
+        if (!isDemoToken(token) && Platform.OS === 'web' && isTokenExpired(token)) {
           const refreshedToken = await refreshAuthToken();
           if (!refreshedToken) {
             await removeToken('userToken');

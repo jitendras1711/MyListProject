@@ -55,3 +55,6 @@ export const refreshAuthToken = async (): Promise<string | null> => {
 
   return null;
 };
+
+export const isDemoToken = (token: string | null | undefined): boolean =>
+  Boolean(token?.startsWith('demo_'));
