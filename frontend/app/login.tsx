@@ -135,7 +135,7 @@ export default function LoginScreen() {
         <View style={styles.logoContainer}>
           <View style={[styles.logoCircle, { backgroundColor: isDark ? theme.card : '#fff' }]}> 
             <Image
-              source={require('../assets/images/icon-login-new.png')}
+              source={require('../assets/images/icon-login-web.png')}
               style={{ width: 48, height: 48, resizeMode: 'contain' }}
             />
           </View>
