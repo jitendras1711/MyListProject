@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Atomize",
+    "description": "Create, organize, complete, and share personal task lists with nested subtasks and friends.",
     "slug": "atomize",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +18,7 @@
         "foregroundImage": "./assets/images/android-icon-foreground.png"
       },
       "package": "com.jitendrabsawant.atomize",
-      "versionCode": 4,
+      "versionCode": 5,
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
